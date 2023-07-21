@@ -2,13 +2,13 @@ const axios = require("axios");
 const {Recipe,Diets} = require("../db");
 
 const getAllDiets = async()=>{
-    const data= (await axios.get("https://api.spoonacular.com/recipes/complexSearch?apiKey=9bd9403db46a4af6bfaa8961373554b5&addRecipeInformation=true&number=100")).data;
+    const data= (await axios.get("https://api.spoonacular.com/recipes/complexSearch?apiKey=5d3cd5aee1904f55a402ec01d5b3380b&addRecipeInformation=true&number=100")).data;
 
     const allDiets=[];
 
     const diets = data.results.map((res)=> {
         return {
-           name :res.diets.map((diet)=>diet.trim()),
+           name :res.diets,
            otherDiet:Object.keys(data.results[0])[0]
         }
     })
@@ -22,7 +22,7 @@ const getAllDiets = async()=>{
     const newObjectDiet = [...new Set(allDiets)].map((diet)=> ({name:diet}));
     
     const savedDb = await Diets.bulkCreate(newObjectDiet);
-    console.log(savedDb)
+    
     return savedDb;
     
 };
