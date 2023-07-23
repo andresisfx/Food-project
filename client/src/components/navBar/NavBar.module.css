@@ -1,0 +1,21 @@
+.navContent{
+    width:100vh;
+    height: 10vw;
+    background-color: yellow;
+    border: solid 2px black;
+    display: flex;
+    align-items: center;
+}
+
+.navButton{
+margin: 40rem;
+height: 10vh;
+background-color: green;
+display: flex;
+align-items: center;
+ 
+}
+.link{
+    margin:5rem;
+    text-align: justify ;
+}
