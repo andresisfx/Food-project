@@ -1,8 +1,8 @@
-import {GET_RECIPES} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS} from "./actions"
 
 let initialState = {
     allRecipes:[],
-
+    allDiets:[]
 }
 
 function rootReducer (state = initialState,action){
@@ -12,12 +12,26 @@ function rootReducer (state = initialState,action){
             ...state,
             allRecipes:action.payload
         }
-     default:
+   
+
+    case SEARCH_BAR:
+        return {
+            ...state,
+            allRecipes:action.payload
+        }
+    case GET_DIETS:
+        return {
+            ...state,
+         allDiets:action.payload
+        }
+        
+      
+        default:
         return {
         ...state
        }
-       
    }
+
 }
 
 export default rootReducer;
