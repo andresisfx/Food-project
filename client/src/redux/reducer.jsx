@@ -2,7 +2,8 @@ import {GET_RECIPES,SEARCH_BAR,GET_DIETS} from "./actions"
 
 let initialState = {
     allRecipes:[],
-    allDiets:[]
+    allDiets:[],
+    errorState:"error"
 }
 
 function rootReducer (state = initialState,action){
@@ -24,8 +25,8 @@ function rootReducer (state = initialState,action){
             ...state,
          allDiets:action.payload
         }
-        
       
+    
         default:
         return {
         ...state

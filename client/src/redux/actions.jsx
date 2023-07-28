@@ -4,7 +4,7 @@ export const GET_RECIPES = "GET_RECIPES"
 export const GET_RECIPESID ="GET_RECIPESID"
 export const GET_DIETS = "GET_DIETS"
 export const SEARCH_BAR = "SEARCH_BAR"
-
+export const CHANGE_ERROR_STATE ="CHANGE_ERROR_STATE"
 
  export  function getRecipes (){
     return async function(dispatch){
@@ -54,6 +54,8 @@ export const SEARCH_BAR = "SEARCH_BAR"
     }
   }
  }
+
+ 
 
  
 

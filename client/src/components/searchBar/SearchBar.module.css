@@ -1,0 +1,17 @@
+.message{
+    color: crimson;
+}
+.input{
+    width: 95%;
+    max-width: 240px;
+    font-family: inherit;
+    font-size:large;
+    font-weight: 700;
+    color: #808BA8;
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px 8px 16px;
+  }
+  
+  

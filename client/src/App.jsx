@@ -18,7 +18,7 @@ const location = useLocation()
     {location.pathname !== "/" && <NavBar/>}
     <Routes>
       <Route path='/' element={<Landing/>}/>
-      <Route path='/home' element={<Home />}/>
+      <Route path='/home' element={<Home/>}/>
       <Route path='/create' element={<Form/>}/>
       <Route path='/detail/:id' element={<Detail/>}/>
     </Routes>

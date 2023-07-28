@@ -3,7 +3,7 @@ import Card from '../card/Card'
 import style from "./Container.module.css"
 
 function Container({recipes}) {
- 
+  
   return (
     <div className={style.container}>
      {recipes.map((rec)=>{

@@ -8,7 +8,7 @@ function NavBar() {
         <div className={style.navButton}>
          <Link className={style.link} to="/"><p>Landing page</p></Link>
          <Link className={style.link} to="/home"><p>Home</p></Link>
-         <Link className={style.link} to="/create"><p>Create activity</p></Link>
+         <Link className={style.link} to="/create"><p>Create recipe</p></Link>
         </div>
     </div>
   )
