@@ -39,6 +39,12 @@ const [loading,setLoading] = useState(true)
   if(errors){
     return <div>Error: {errors}</div>
   }
+  const removeHtmlTags = ()=>{
+    const regex =   /<\/?[^>]+(>|$)/g
+
+    return recipe[0].summaryOfDish.replace(regex, " ")
+
+  }
   return (
     <div>
       <img src={recipe[0].image} alt={recipe.name}  />
@@ -49,7 +55,7 @@ const [loading,setLoading] = useState(true)
       <h2>Name:</h2>
       <h2> {recipe[0].name}</h2>
       <h3>Summary of dish: </h3>
-      <h4>{recipe[0].summaryOfDish}</h4>
+      <h4>{removeHtmlTags(recipe[0].summaryOfDish)}</h4>
       <div>
         <h3>Instructions:</h3>
       <ol>

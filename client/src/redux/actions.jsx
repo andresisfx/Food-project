@@ -45,6 +45,7 @@ export const CHANGE_ERROR_STATE ="CHANGE_ERROR_STATE"
     try {
       const response = await axios.get("http://localhost:3001/diets");
       const diets = response.data
+     
       dispatch({
         type:GET_DIETS,
         payload:diets
