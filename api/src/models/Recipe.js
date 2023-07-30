@@ -29,11 +29,11 @@ module.exports = (sequelize) => {
       validate:{
         isInt:true,
         min:1,
-        max:10
+        max:100
       }
     },
     stepByStep:{
-      type:DataTypes.TEXT,
+      type:DataTypes.ARRAY(DataTypes.STRING),
       allowNull:false
     },
     createdDb:{

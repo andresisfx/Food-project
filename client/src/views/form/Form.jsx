@@ -3,6 +3,8 @@ import { useState,useEffect } from "react"
 import { useDispatch,useSelector } from 'react-redux'
 import { getDiets } from '../../redux/actions';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import style from "./Form.module.css"
 function Form() {
   const allDiets = useSelector((state)=>state.allDiets);
   const dispatch = useDispatch();
@@ -11,8 +13,8 @@ function Form() {
     image:"",
     healthScore:"",
     summaryOfDish:"",
-    diets:[],
-    stepByStep:[]
+    diets:"select at least a diet",
+    stepByStep:"at least one instruction is required"
   });
   const [input,setInput] = useState({ 
     name:"",
@@ -34,16 +36,28 @@ function Form() {
     setInput({...input,[event.target.name]:event.target.value})
     validate(event)
   }
-  const addInstruction = (event)=>{
-    event.preventDefault()
-    if(input.instruction.length>0){
-      const savedstepByStep = input.stepByStep;
-      savedstepByStep.push({name:input.instruction})
-      setInput({...input,[input.stepByStep]:savedstepByStep})
-      setInput({...input,instruction:""})
-
+ 
+  const addInstruction = (event) => {
+    event.preventDefault();
+    if (input.instruction.trim().length > 0) {
+      setInput((prevInput) => ({
+        ...prevInput,
+        stepByStep: [...prevInput.stepByStep, {name:input.instruction.trim()}],
+        instruction: "",
+      }));
+  
+      setErrors((errors) => ({
+        ...errors,
+        stepByStep: "",
+      }));
+    } else {
+      setErrors((errors) => ({
+        ...errors,
+        stepByStep: "at least one instruction is required",
+      }));
     }
-  }
+  };
+  
   const handlerCheckBox =(id,checked)=>{
     const findIndex =checked.indexOf(id)
     if(findIndex>-1){
@@ -54,9 +68,23 @@ function Form() {
     }
     return checked
   }
-  const handleChangeDiets = (name)=>{
-    setInput({...input,diets:handlerCheckBox(name,[...input.diets])})
-  }
+ 
+  const handleChangeDiets = (name) => {
+    setInput((prevInput) => {
+      const updatedDiets = handlerCheckBox(name, [...prevInput.diets]);
+  
+      if (updatedDiets.length) {
+        setErrors((prevErrors) => ({ ...prevErrors, diets: "" }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, diets: "Select a diet" }));
+      }
+  
+      return { ...prevInput, diets: updatedDiets };
+    });
+  };
+
+
+  
   const isChecked= (name)=>{
     return input.diets.includes(name)
   }
@@ -64,43 +92,107 @@ function Form() {
     const value= event.target.value
     const property = event.target.name
     if(property=== "name"){
-      const regex=/^[A-Za-z\s]+$/;
+      const regex=/^(?!\s*$).+/;
+      
       if(!regex.test(value)){
-        setErrors({...errors,name:"only leters are allowed"})
+        setErrors((prevErrors)=>({...prevErrors,name:"Only leters are allowed"}))
       }
-     
+      else{
+        setErrors((prevErrors)=>({...prevErrors,name:""}))
+      }     
       }
       if(property=== "image"){
         const regex=/^https?:\/\/[\w-]+(\.[\w-]+)+[/#?]?.*$/;
         if(!regex.test(value)){
-          setErrors({...errors,image:"invalid URL"})
+          setErrors((prevErrors)=>({...prevErrors,image:"Invalid URL"}))
         }
-       
+        else{
+          setErrors((prevErrors)=>({...prevErrors,image:""}))
+        }       
         }
-        if(property=== "healthScore"){
-          
-          if(Number.isInteger(value)){
-            setErrors({...errors,image:"invalid URL"})
+       if (property === "healthScore") {
+          const valueNum = parseInt(value)
+          if (valueNum < 1 || valueNum > 100||!valueNum) {
+            setErrors((prevErrors) => ({ ...prevErrors, healthScore: "only numbers from 1 to 100 are allowed" }));
+          } else {
+            setErrors((prevErrors) => ({ ...prevErrors, healthScore: "" }));
           }
-         
-          }
+        }
+       if(property=== "summaryOfDish"){
+          const regex = /^(?!\s*$).+/;
+        if(!regex.test(value)){
+         setErrors((prevErrors)=>({...prevErrors,summaryOfDish:"This field is required"}))
+           }
+         else{
+            setErrors((prevErrors)=>({...prevErrors,summaryOfDish:""}))
+           }
+        }
     }
     
     
   
    
-  // const onSubmit=(event)=>{
-  //  event.preventDefault();
+  const handleSubmit=(event)=>{
+   event.preventDefault();
+ 
+   if(errors.name||
+      errors.image||
+      errors.healthScore||
+      errors.summaryOfDish||
+      errors.diets||
+      errors.stepByStep){
+    alert("please verify your information")
+    return;
+   }
+   console.log(input)
+   axios.post("http://localhost:3001/recipes",{
+    name:input.name,
+    stepByStep:input.stepByStep.map((instruction) => instruction.name),
+    image:input.image,
+    healthScore:input.healthScore,
+    summaryOfDish:input.summaryOfDish,
+    diets:input.diets.map(diet=>diet),
+  }) 
+   .then((res)=>{
+    alert("recipe registered succesfully")
+  
+   })
+   .catch((error)=>{
+    if(error.response){
+      console.error("Error processing the request:",error.response.data)
+    }
+    else{
+      console.error("Error processing the request: ",error.message)
+    }
+   })
+   .finally(() => {
+    setInput({
+      name:"",
+      image:"",
+      healthScore:"",
+      summaryOfDish:"",
+      diets:[],
+      stepByStep:[],
+      instruction: "",
+    });
+  });
+   
 
-  // }
-  console.log(errors)
+  }
+ 
+ 
+  console.log(input)
   return (
-    <form action="">
+    <form onSubmit={handleSubmit}>
       <div>
        <input type="text" placeholder="Name: (max: 100 letters)" name="name" value={input.name} onChange={handleChange} />
+       {errors.name&&<p className={style.errorText}>{errors.name}</p>}
        <input type="text" placeholder="image url" name="image" value={input.image} onChange={handleChange} />
+       {errors.image&&<p className={style.errorText}>{errors.image}</p>}
        <input type="number" placeholder="HealthScore: (min:1 max:100 points )" name="healthScore" value={input.healthScore} onChange={handleChange} />
-       <textarea placeholder="summaryOfDish: (max: 250 letters)" name='summaryOfDish' value={input.summaryOfDish} onChange={handleChange}  cols="30" rows="10"></textarea>
+       {errors.healthScore&&<p className={style.errorText}>{errors.healthScore}</p>}
+       <textarea placeholder="summaryOfDish: (max: 500 characters)" name='summaryOfDish' value={input.summaryOfDish} onChange={handleChange}  cols="30" rows="10"></textarea>
+       {errors.summaryOfDish&&<p className={style.errorText}>{errors.summaryOfDish}</p>}
       </div>
       <div>
         <h3>Choose yourdiet type</h3>
@@ -109,23 +201,26 @@ function Form() {
             <input
              type="checkbox"
              id={`check-${diet.name}`}
+             name='diets'
              onChange={()=>handleChangeDiets(diet.name)} // ()=>  handlerDiets will be executed only when the event occurs, instead of executing it immediately.
              defaultChecked={isChecked(diet.name)} />
              <label  htmlFor={`check-${diet.name}`}>{diet.name}</label>
           </div>
         ))}
+        {errors.diets&&<p className={style.errorText}>{errors.diets}</p>}
       </div>
       <div>
         <h3>Add stepByStep: </h3>
         <input type="text" name='instruction' value={input.instruction} onChange={handleChange} />
         <button onClick={addInstruction}>Add</button>
         {input.stepByStep.map((ins,index)=><input value={ins.name} key={index} disabled/>)}
+        {errors.stepByStep&&<p className={style.errorText}>{errors.stepByStep}</p>}
       </div>
       <div>
         <Link to="/home">
           <button>Back home</button>
         </Link>
-          <button>Create recipe</button> 
+          <button type='submit'>Create recipe</button> 
       </div>
     </form>
   )

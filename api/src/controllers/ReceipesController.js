@@ -70,7 +70,7 @@ const createRecipe = async(name,id,image,summaryOfDish,healthScore,stepByStep,di
     
 })
    console.log(getDietsDb)
-    await newRecipe.addDiets(getDietsDb);
+    await newRecipe.setDiets(getDietsDb);
     return newRecipe
 }
 
