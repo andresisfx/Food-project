@@ -29,7 +29,7 @@ const [loading,setLoading] = useState(true)
     getDetail()
   },[id])
 
- console.log(recipe)
+ 
  if(Object.keys(recipe).length === 0){
   return <div><h1>Detail loading...</h1></div>
  }
@@ -64,7 +64,7 @@ const [loading,setLoading] = useState(true)
       </div>
       <div>
         <h3>Diets:</h3>
-      <ul> {Array.isArray(recipe[0].diets)?recipe[0].diets.map((diet)=><li key={recipe[0].diets}>{diet}</li>):<li>Diets not avaliable</li>}</ul>
+      <ul> {Array.isArray(recipe[0].diets)?recipe[0].diets.map((diet)=><li key={recipe[0].diets}>{diet.name}</li>):<li>Diets not avaliable</li>}</ul>
       </div>
     </div>
   )

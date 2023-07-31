@@ -3,7 +3,7 @@ module.exports=(sequelize)=>{
     sequelize.define('Diets',{
       
       name:{
-        type:DataTypes.TEXT,
+        type:DataTypes.JSONB,
         allowNull:false
       }
     },

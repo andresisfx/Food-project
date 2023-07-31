@@ -9,10 +9,10 @@ function Form() {
   const allDiets = useSelector((state)=>state.allDiets);
   const dispatch = useDispatch();
   const [errors,setErrors]=useState({
-    name:"",
-    image:"",
-    healthScore:"",
-    summaryOfDish:"",
+    name:"please fiil the field",
+    image:"please fiil the field",
+    healthScore:"please fiil the field",
+    summaryOfDish:"please fiil the field",
     diets:"select at least a diet",
     stepByStep:"at least one instruction is required"
   });
@@ -86,6 +86,7 @@ function Form() {
 
   
   const isChecked= (name)=>{
+    
     return input.diets.includes(name)
   }
   const validate=(event)=>{
@@ -151,7 +152,7 @@ function Form() {
     image:input.image,
     healthScore:input.healthScore,
     summaryOfDish:input.summaryOfDish,
-    diets:input.diets.map(diet=>diet),
+    diets:input.diets
   }) 
    .then((res)=>{
     alert("recipe registered succesfully")
@@ -175,6 +176,14 @@ function Form() {
       stepByStep:[],
       instruction: "",
     });
+    setErrors({
+      name:"please fiil the field",
+      image:"please fiil the field",
+      healthScore:"please fiil the field",
+      summaryOfDish:"please fiil the field",
+      diets:"select at least a diet",
+      stepByStep:"at least one instruction is required"
+    })
   });
    
 
@@ -203,7 +212,7 @@ function Form() {
              id={`check-${diet.name}`}
              name='diets'
              onChange={()=>handleChangeDiets(diet.name)} // ()=>  handlerDiets will be executed only when the event occurs, instead of executing it immediately.
-             defaultChecked={isChecked(diet.name)} />
+             checked={isChecked(diet.name)} />
              <label  htmlFor={`check-${diet.name}`}>{diet.name}</label>
           </div>
         ))}

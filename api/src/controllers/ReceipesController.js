@@ -16,7 +16,7 @@ const getRecipesApi = async()=> {
                 })
             }).flat(),
             image:result.image,
-            diets:result.diets.length?result.diets:"there aren't diets" 
+            diets:result.diets.length?result.diets.map((diet)=> ({name:diet})):"there aren't diets" 
         }
            
         
@@ -69,9 +69,10 @@ const createRecipe = async(name,id,image,summaryOfDish,healthScore,stepByStep,di
     } 
     
 })
-   console.log(getDietsDb)
-    await newRecipe.setDiets(getDietsDb);
-    return newRecipe
+const dietIds = getDietsDb.map((diet) => diet.id)
+await newRecipe.setDiets(dietIds)
+    // await newRecipe.setDiets(getDietsDb);
+     return newRecipe
 }
 
 module.exports={getAllRecipes,getRecipeByName,getRecipeById,createRecipe }
