@@ -5,6 +5,8 @@ import { getDiets } from '../../redux/actions';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import style from "./Form.module.css"
+import { v4 as uuidv4 } from 'uuid'
+
 function Form() {
   const allDiets = useSelector((state)=>state.allDiets);
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ function Form() {
  
   useEffect(()=>{
     dispatch(getDiets())
+    console.log("mounted")
   },[dispatch])
   
   const handleChange= (event)=>{
@@ -36,6 +39,8 @@ function Form() {
     setInput({...input,[event.target.name]:event.target.value})
     validate(event)
   }
+
+  
  
   const addInstruction = (event) => {
     event.preventDefault();
@@ -57,33 +62,64 @@ function Form() {
       }));
     }
   };
+
+
   
-  const handlerCheckBox =(id,checked)=>{
-    const findIndex =checked.indexOf(id)
-    if(findIndex>-1){
-      checked.splice(findIndex,1)
+  // const handlerCheckBox =(name,checked)=>{
+  //   const findIndex =checked.indexOf(name)
+  //   if(findIndex>-1){
+  //     checked.splice(findIndex,1)
+  //   }
+  //   else{
+  //     checked.push(name)
+  //   }
+  //   return checked
+  // }
+  const handlerCheckBox = (name, checked) => {
+    const findIndex = checked.indexOf(name);
+  
+    if (findIndex > -1) {
+      checked.splice(findIndex, 1); 
+    } else {
+      checked.push(name); 
     }
-    else{
-      checked.push(id)
-    }
-    return checked
-  }
- 
-  const handleChangeDiets = (name) => {
-    setInput((prevInput) => {
-      const updatedDiets = handlerCheckBox(name, [...prevInput.diets]);
   
-      if (updatedDiets.length) {
-        setErrors((prevErrors) => ({ ...prevErrors, diets: "" }));
-      } else {
-        setErrors((prevErrors) => ({ ...prevErrors, diets: "Select a diet" }));
-      }
-  
-      return { ...prevInput, diets: updatedDiets };
-    });
+    
+    return checked.filter((item, index) => checked.indexOf(item) === index);
   };
-
-
+  
+ 
+  // const handleChangeDiets = (name) => {
+  //   setInput((prevInput) => {
+  //     const updatedDiets = handlerCheckBox(name, [...prevInput.diets]);
+  
+  //     if (updatedDiets.length) {
+  //       setErrors((prevErrors) => ({ ...prevErrors, diets: "" }));
+  //     } else {
+  //       setErrors((prevErrors) => ({ ...prevErrors, diets: "Select a diet" }));
+  //     }
+  
+  //     return { ...prevInput, diets: updatedDiets };
+  //   });
+  // };
+  const handleChangeDiets = (name) => {
+    const updatedDiets = handlerCheckBox(name, [...input.diets]);
+  
+    const hasSelectedDiets = updatedDiets.length > 0;
+  
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      diets: hasSelectedDiets ? "" : "select at least a diet",
+    }));
+  
+    setInput((prevInput) => ({
+      ...prevInput,
+      diets: updatedDiets,
+    }));
+  };
+  
+  
+  
   
   const isChecked= (name)=>{
     
@@ -145,7 +181,7 @@ function Form() {
     alert("please verify your information")
     return;
    }
-   console.log(input)
+   
    axios.post("http://localhost:3001/recipes",{
     name:input.name,
     stepByStep:input.stepByStep.map((instruction) => instruction.name),

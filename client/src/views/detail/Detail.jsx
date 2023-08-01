@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 
 
@@ -10,6 +11,7 @@ const {id}= useParams()
 const [recipe,setRecipe]= useState({})
 const [errors,setErrors]= useState(null) 
 const [loading,setLoading] = useState(true)
+ 
 
 
   useEffect(()=>{
@@ -17,8 +19,10 @@ const [loading,setLoading] = useState(true)
       try {
         if(id){
         const response = await axios.get(`http://localhost:3001/recipes/${id}`)
-        const recipeId = response.data
-         setRecipe(recipeId)
+        const recipeById = response.data
+        
+         setRecipe(recipeById)
+         console.log(recipeById)
          setLoading(false)
         }
       } catch (error) {
@@ -45,6 +49,7 @@ const [loading,setLoading] = useState(true)
     return recipe[0].summaryOfDish.replace(regex, " ")
 
   }
+  const standarDiet=  recipe[0].diets|| recipe[0].Diets
   return (
     <div>
       <img src={recipe[0].image} alt={recipe.name}  />
@@ -64,7 +69,7 @@ const [loading,setLoading] = useState(true)
       </div>
       <div>
         <h3>Diets:</h3>
-      <ul> {Array.isArray(recipe[0].diets)?recipe[0].diets.map((diet)=><li key={recipe[0].diets}>{diet.name}</li>):<li>Diets not avaliable</li>}</ul>
+      <ul> {Array.isArray(standarDiet)?standarDiet.map((diet)=><li key={uuidv4()}>{diet.name}</li>):<li>Diets not avaliable</li>}</ul>
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import {  filterByDiet, getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
-
+import { v4 as uuidv4 } from 'uuid'
 
 function Home() {
 
@@ -42,7 +42,7 @@ function Home() {
         <label htmlFor="">Select a recipe according the diet type </label>
         <select onChange={handleSelectChange} value={selectedDiet}>
           <option value="none">All diets</option>
-          {diets?diets.map((diet)=><option key={diet.name} value={diet.name}>{diet.name}</option>):null }
+          {diets?diets.map((diet)=><option key={uuidv4()} value={diet.name}>{diet.name}</option>):null }
         </select>
       </div>
       <div>

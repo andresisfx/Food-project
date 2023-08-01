@@ -8,17 +8,19 @@ export const CHANGE_ERROR_STATE ="CHANGE_ERROR_STATE"
 export const FILTER_DIET="FILTER_DIET"
 
 
+const normalizeDiets=(recipes)=> {
+  return recipes.map((recipe) => ({
+    ...recipe,
+    diets: recipe.Diets || recipe.diets,
+  }));
+}
+
  export  function getRecipes (){
     return async function(dispatch){
       try {
         const response = await axios.get("http://localhost:3001/recipes");
         const recipes = response.data
-        const normalizeDiets=(recipes)=> {
-         return recipes.map((recipe) => ({
-           ...recipe,
-           diets: recipe.Diets || recipe.diets,
-         }));
-       }
+       
        const standarRecipe = normalizeDiets(recipes)
         dispatch({
             type:GET_RECIPES,
@@ -36,7 +38,8 @@ export const FILTER_DIET="FILTER_DIET"
     try {
       const response = await axios.get(`http://localhost:3001/recipes?name=${name}`);
       const recipeName = response.data
-      dispatch({type:SEARCH_BAR,payload:recipeName})
+      const standarRecipe = normalizeDiets(recipeName)
+      dispatch({type:SEARCH_BAR,payload:standarRecipe})
     } catch (error) {
       alert({error:error.message})
     }

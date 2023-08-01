@@ -65,13 +65,13 @@ const createRecipe = async(name,id,image,summaryOfDish,healthScore,stepByStep,di
     
     const getDietsDb = await Diets.findAll({
     where:{
-        name:diets
+        name: diets
     } 
     
-})
-const dietIds = getDietsDb.map((diet) => diet.id)
-await newRecipe.setDiets(dietIds)
-    // await newRecipe.setDiets(getDietsDb);
+    })
+    // const dietIds = getDietsDb.map((diet) => diet.id)
+    // await newRecipe.setDiets(dietIds)
+     await newRecipe.setDiets(getDietsDb);
      return newRecipe
 }
 
