@@ -9,7 +9,18 @@ module.exports=(sequelize)=>{
       },
       name:{
         type:DataTypes.JSONB,
-        allowNull:false
+        allowNull:false,
+        validate:{
+          validate: {
+            isUnique: async (value) => {
+              const existingDiet = await sequelize.models.Diets.findOne({ where: { name: value } });
+              if (existingDiet) {
+                throw new Error('The diet name must be unique.');
+              }
+            },
+          },
+        
+        }
       }
     },
     {

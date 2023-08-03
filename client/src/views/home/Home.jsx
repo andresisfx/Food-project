@@ -1,25 +1,28 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import {  filterByDiet, getDiets, getRecipes } from '../../redux/actions'
+import {  cleanFiler, filterApi, filterByDiet, filterCreated, getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
 import { v4 as uuidv4 } from 'uuid'
 
-function Home() {
+function Home() { 
 
   const recipes = useSelector((state)=> state.allRecipes);
+  
+ 
+  
   const diets= useSelector((state)=> state.allDiets)
-  const [reloadRecipes,setReloadRecipes] = useState(false)
+ 
   const dispatch = useDispatch();
  console.log(recipes)
  useEffect  (()=>{
   dispatch(getRecipes())
   dispatch(getDiets())
-  setReloadRecipes(false)
+  
   console.log('useEffect: Home mounted')
  
- },[reloadRecipes])
+ },[])
 
    const [selectedDiet,setSelectedDiet]=useState("none")
     
@@ -29,11 +32,23 @@ function Home() {
      dispatch(filterByDiet(dietName))
    }
    
+ 
 
+   const handleCreatedChange =()=>{
+       dispatch(filterCreated())
+   }
+   const handleCleanFilterchange=()=>{
+      dispatch(cleanFiler())
+   }
+   const handleApiFilter=()=>{
+    dispatch(filterApi())
+   }
+  
   return (
     <div> 
       <div>
-        <button onClick={()=>setReloadRecipes(true)}>All recipes</button>
+        <button onClick={()=>handleCleanFilterchange()} >All recipes</button>
+        
       </div>
       <div>
         <SearchBar/>
@@ -44,6 +59,12 @@ function Home() {
           <option value="none">All diets</option>
           {diets?diets.map((diet)=><option key={uuidv4()} value={diet.name}>{diet.name}</option>):null }
         </select>
+      </div>
+      <div>       
+        <button onClick={()=>handleCreatedChange()}>Creted recipes</button>
+      </div>
+      <div>
+        <button onClick={()=>handleApiFilter()}>Recipes from app</button>
       </div>
       <div>
       <Container recipes={recipes}/>

@@ -34,6 +34,7 @@ function Form() {
     console.log("mounted")
   },[dispatch])
   
+ 
   const handleChange= (event)=>{
     
     setInput({...input,[event.target.name]:event.target.value})
@@ -116,6 +117,7 @@ function Form() {
       ...prevInput,
       diets: updatedDiets,
     }));
+   
   };
   
   

@@ -6,6 +6,9 @@ export const GET_DIETS = "GET_DIETS"
 export const SEARCH_BAR = "SEARCH_BAR"
 export const CHANGE_ERROR_STATE ="CHANGE_ERROR_STATE"
 export const FILTER_DIET="FILTER_DIET"
+export const FILTER_CREATED = "FILTER_CREATED"
+export const FILTER_API="FILTER_API"
+export const CLEAN_FILTER="CLEAN_FILTER"
 
 
 const normalizeDiets=(recipes)=> {
@@ -68,7 +71,11 @@ const normalizeDiets=(recipes)=> {
  }
  
  export const filterByDiet =(diet)=>({type:FILTER_DIET,payload:diet})
+
+ export const filterCreated =(recipes)=>({type:FILTER_CREATED,payload:recipes})
  
+ export const cleanFiler=()=>({type:CLEAN_FILTER})
+ export const filterApi=()=>({type:FILTER_API})
  
  
 

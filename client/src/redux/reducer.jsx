@@ -1,4 +1,4 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API} from "./actions"
 
 let initialState = {
     allRecipes:[],
@@ -13,12 +13,13 @@ function rootReducer (state = initialState,action){
         return{ 
             ...state,
             allRecipes:action.payload,
-            allRecipesCopy:action.payload
+            allRecipesCopy:JSON.parse(JSON.stringify(action.payload))
             
         }
    
 
     case SEARCH_BAR:
+        
         return {
             ...state,
             allRecipes:action.payload
@@ -30,7 +31,7 @@ function rootReducer (state = initialState,action){
         }
     case FILTER_DIET:
      
-    const dietName = action.payload.toLowerCase();
+    const dietName = action.payload;
     let filterOne = [];
   
     if (action.payload === "none") {
@@ -46,8 +47,25 @@ function rootReducer (state = initialState,action){
     return{
         ...state,
         allRecipes:filterOne
-    }
-   
+    } 
+    case FILTER_CREATED:
+          
+        return{
+            ...state,
+            allRecipes: state.allRecipesCopy.filter(recipe=>recipe.hasOwnProperty("createdDb"))
+        }
+
+    case CLEAN_FILTER:
+      return{
+        ...state,
+        allRecipes:state.allRecipesCopy
+      } 
+    case FILTER_API:
+      return{
+        ...state,
+        allRecipes: state.allRecipesCopy.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
+      }     
+          
         default:
         return {
         ...state

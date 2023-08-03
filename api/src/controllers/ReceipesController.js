@@ -59,6 +59,7 @@ const getRecipeById = async(id)=>{
     return idRecipe
 }
 const createRecipe = async(name,id,image,summaryOfDish,healthScore,stepByStep,diets)=>{
+    console.log(diets)
     const newRecipe =await Recipe.create({
         name,id,image,summaryOfDish,healthScore,stepByStep
     })
@@ -71,7 +72,7 @@ const createRecipe = async(name,id,image,summaryOfDish,healthScore,stepByStep,di
     })
     // const dietIds = getDietsDb.map((diet) => diet.id)
     // await newRecipe.setDiets(dietIds)
-     await newRecipe.setDiets(getDietsDb);
+     await newRecipe.addDiets(getDietsDb);
      return newRecipe
 }
 
