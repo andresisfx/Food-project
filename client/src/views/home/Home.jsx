@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import {  cleanFiler, filterApi, filterByDiet, filterCreated, getDiets, getRecipes } from '../../redux/actions'
+import { cleanFiler, filterApi, filterAtoZ, filterByDiet, filterCreated, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
@@ -43,6 +43,12 @@ function Home() {
    const handleApiFilter=()=>{
     dispatch(filterApi())
    }
+   const handleAtoZ=()=>{
+    dispatch(filterAtoZ())
+   }
+   const handleZtoA=()=>{
+    dispatch(filterZtoA())
+   }
   
   return (
     <div> 
@@ -65,6 +71,11 @@ function Home() {
       </div>
       <div>
         <button onClick={()=>handleApiFilter()}>Recipes from app</button>
+      </div>
+      <div>
+        <label htmlFor="">Sort in alphabetical order</label>
+        <button onClick={()=>handleAtoZ()}>A to Z</button>
+        <button onClick={()=>handleZtoA()}>Z to A</button>
       </div>
       <div>
       <Container recipes={recipes}/>

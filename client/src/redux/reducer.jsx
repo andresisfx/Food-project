@@ -1,4 +1,4 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_A_Z, FILTER_Z_A} from "./actions"
 
 let initialState = {
     allRecipes:[],
@@ -65,7 +65,16 @@ function rootReducer (state = initialState,action){
         ...state,
         allRecipes: state.allRecipesCopy.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
       }     
-          
+    case FILTER_A_Z:
+      return{
+        ...state,
+        allRecipes: state.allRecipesCopy.sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase())) 
+      }
+    case FILTER_Z_A:
+      return{
+        ...state,
+        allRecipes: state.allRecipesCopy.sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase())) 
+      }        
         default:
         return {
         ...state
