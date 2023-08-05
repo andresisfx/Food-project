@@ -1,8 +1,12 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_A_Z, FILTER_Z_A} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_A_Z, FILTER_Z_A, FILTER_SCORE} from "./actions"
 
 let initialState = {
     allRecipes:[],
     allRecipesCopy:[],
+    recipesCopy2:[],
+    recipesCopy3:[],
+    recipesCopyForAll:[],
+    recipesCopy4:[],
     allDiets:[],
     errorState:"error"
 }
@@ -13,7 +17,11 @@ function rootReducer (state = initialState,action){
         return{ 
             ...state,
             allRecipes:action.payload,
-            allRecipesCopy:JSON.parse(JSON.stringify(action.payload))
+            allRecipesCopy:JSON.parse(JSON.stringify(action.payload)),
+            recipesCopy2:JSON.parse(JSON.stringify(action.payload)),
+            recipesCopy3:JSON.parse(JSON.stringify(action.payload)),
+            recipesCopyForAll:JSON.parse(JSON.stringify(action.payload)),
+            recipesCopy4:JSON.parse(JSON.stringify(action.payload))
             
         }
    
@@ -58,12 +66,12 @@ function rootReducer (state = initialState,action){
     case CLEAN_FILTER:
       return{
         ...state,
-        allRecipes:state.allRecipesCopy
+        allRecipes:state.recipesCopyForAll
       } 
     case FILTER_API:
       return{
         ...state,
-        allRecipes: state.allRecipesCopy.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
+        allRecipes: state.recipesCopy3.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
       }     
     case FILTER_A_Z:
       return{
@@ -73,8 +81,15 @@ function rootReducer (state = initialState,action){
     case FILTER_Z_A:
       return{
         ...state,
-        allRecipes: state.allRecipesCopy.sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase())) 
-      }        
+        allRecipes: state.recipesCopy2.sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase())) 
+      } 
+    case FILTER_SCORE:                                                             
+      const scoreFiltered= action.payload==="up"? [...state.allRecipesCopy].sort((a,b)=>a.healthScore-b.healthScore):
+      [...state.allRecipesCopy].sort((a,b)=>b.healthScore-a.healthScore)
+      return{
+        ...state,
+        allRecipes:scoreFiltered
+      }         
         default:
         return {
         ...state

@@ -66,16 +66,7 @@ function Form() {
 
 
   
-  // const handlerCheckBox =(name,checked)=>{
-  //   const findIndex =checked.indexOf(name)
-  //   if(findIndex>-1){
-  //     checked.splice(findIndex,1)
-  //   }
-  //   else{
-  //     checked.push(name)
-  //   }
-  //   return checked
-  // }
+ 
   const handlerCheckBox = (name, checked) => {
     const findIndex = checked.indexOf(name);
   
@@ -90,19 +81,7 @@ function Form() {
   };
   
  
-  // const handleChangeDiets = (name) => {
-  //   setInput((prevInput) => {
-  //     const updatedDiets = handlerCheckBox(name, [...prevInput.diets]);
-  
-  //     if (updatedDiets.length) {
-  //       setErrors((prevErrors) => ({ ...prevErrors, diets: "" }));
-  //     } else {
-  //       setErrors((prevErrors) => ({ ...prevErrors, diets: "Select a diet" }));
-  //     }
-  
-  //     return { ...prevInput, diets: updatedDiets };
-  //   });
-  // };
+
   const handleChangeDiets = (name) => {
     const updatedDiets = handlerCheckBox(name, [...input.diets]);
   

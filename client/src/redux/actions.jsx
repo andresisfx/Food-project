@@ -11,6 +11,7 @@ export const FILTER_API="FILTER_API"
 export const CLEAN_FILTER="CLEAN_FILTER"
 export const FILTER_A_Z="FILTER_A_Z"
 export const FILTER_Z_A="FILTER_Z_A"
+export const FILTER_SCORE="FILTER_SCORE"
 
 
 const normalizeDiets=(recipes)=> {
@@ -75,6 +76,8 @@ const normalizeDiets=(recipes)=> {
  export const filterByDiet =(diet)=>({type:FILTER_DIET,payload:diet})
 
  export const filterCreated =(recipes)=>({type:FILTER_CREATED,payload:recipes})
+
+ export const filterScore =(orientation)=>({type:FILTER_SCORE,payload:orientation})
  
  export const cleanFiler=()=>({type:CLEAN_FILTER})
  export const filterApi=()=>({type:FILTER_API})

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { cleanFiler, filterApi, filterAtoZ, filterByDiet, filterCreated, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
+import { cleanFiler, filterApi, filterAtoZ, filterByDiet, filterCreated, filterScore, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
@@ -9,10 +9,11 @@ import { v4 as uuidv4 } from 'uuid'
 function Home() { 
 
   const recipes = useSelector((state)=> state.allRecipes);
-  
- 
-  
   const diets= useSelector((state)=> state.allDiets)
+  const [selectedDiet,setSelectedDiet]=useState("none")
+  const [currentPage,setCurrentPage]=useState(0)
+  const itemsPerPage = 10
+  const [item,setItem]=useState([...recipes].splice(0,itemsPerPage))
  
   const dispatch = useDispatch();
  console.log(recipes)
@@ -22,9 +23,19 @@ function Home() {
   
   console.log('useEffect: Home mounted')
  
- },[])
+ },[dispatch])
+ 
+ useEffect(()=>{
+   setItem([...recipes].splice(0,itemsPerPage))
+ },[[recipes]])
 
-   const [selectedDiet,setSelectedDiet]=useState("none")
+ const nextPage=()=>{
+  const next_page= currentPage+1;
+  const firstIndex= next_page*itemsPerPage
+
+  setItem([...recipes].splice(firstIndex,itemsPerPage))
+  setCurrentPage(next_page)
+ }
     
    const handleSelectChange=(event)=>{
     const dietName=event.target.value
@@ -32,8 +43,6 @@ function Home() {
      dispatch(filterByDiet(dietName))
    }
    
- 
-
    const handleCreatedChange =()=>{
        dispatch(filterCreated())
    }
@@ -48,6 +57,9 @@ function Home() {
    }
    const handleZtoA=()=>{
     dispatch(filterZtoA())
+   }
+   const handleScoreChange=(orientation)=>{
+     dispatch(filterScore(orientation))
    }
   
   return (
@@ -78,9 +90,16 @@ function Home() {
         <button onClick={()=>handleZtoA()}>Z to A</button>
       </div>
       <div>
+        <label >Order recipe by healthscore</label>
+        <select name="" onChange={(event)=>handleScoreChange(event.target.value)} >
+        <option value="up">From least healthy to healthiest</option>
+        <option value="down">From healthiest to least healthy</option>
+        </select>
+      </div>
+      <div>
       <Container recipes={recipes}/>
       </div>
-    </div>
+    </div> 
   )
 }
 
