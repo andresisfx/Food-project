@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { cleanFiler, filterApi, filterAtoZ, filterByDiet, filterCreated, filterScore, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
+import { cleanFiler, filterApi, alphabeticFilter, filterByDiet, filterCreated, filterScore, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
@@ -36,6 +36,9 @@ function Home() {
   setItem([...recipes].splice(firstIndex,itemsPerPage))
   setCurrentPage(next_page)
  }
+ const handleNextPage=()=>{
+  set
+ }
     
    const handleSelectChange=(event)=>{
     const dietName=event.target.value
@@ -52,12 +55,10 @@ function Home() {
    const handleApiFilter=()=>{
     dispatch(filterApi())
    }
-   const handleAtoZ=()=>{
-    dispatch(filterAtoZ())
+   const handleAlphabetical=(orientation)=>{
+    dispatch(alphabeticFilter(orientation))
    }
-   const handleZtoA=()=>{
-    dispatch(filterZtoA())
-   }
+   
    const handleScoreChange=(orientation)=>{
      dispatch(filterScore(orientation))
    }
@@ -86,8 +87,10 @@ function Home() {
       </div>
       <div>
         <label htmlFor="">Sort in alphabetical order</label>
-        <button onClick={()=>handleAtoZ()}>A to Z</button>
-        <button onClick={()=>handleZtoA()}>Z to A</button>
+        <select onChange={(event)=>handleAlphabetical(event.target.value)}>
+        <option value="A">A to Z</option>
+        <option value="Z">Z to A</option>
+        </select>
       </div>
       <div>
         <label >Order recipe by healthscore</label>

@@ -1,12 +1,8 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_A_Z, FILTER_Z_A, FILTER_SCORE} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_ALPHABETIC, FILTER_SCORE} from "./actions"
 
 let initialState = {
     allRecipes:[],
     allRecipesCopy:[],
-    recipesCopy2:[],
-    recipesCopy3:[],
-    recipesCopyForAll:[],
-    recipesCopy4:[],
     allDiets:[],
     errorState:"error"
 }
@@ -73,16 +69,15 @@ function rootReducer (state = initialState,action){
         ...state,
         allRecipes: state.recipesCopy3.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
       }     
-    case FILTER_A_Z:
+    case FILTER_ALPHABETIC:
+      const filteredRec=[]
+      action.payload==="A"?filteredRec=[...state.allRecipesCopy].sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase())):
+      filteredRec=[...state.allRecipesCopy].sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase()))
       return{
         ...state,
-        allRecipes: state.allRecipesCopy.sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase())) 
+        allRecipes:filteredRec
       }
-    case FILTER_Z_A:
-      return{
-        ...state,
-        allRecipes: state.recipesCopy2.sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase())) 
-      } 
+  
     case FILTER_SCORE:                                                             
       const scoreFiltered= action.payload==="up"? [...state.allRecipesCopy].sort((a,b)=>a.healthScore-b.healthScore):
       [...state.allRecipesCopy].sort((a,b)=>b.healthScore-a.healthScore)

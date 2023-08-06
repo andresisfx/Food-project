@@ -9,8 +9,7 @@ export const FILTER_DIET="FILTER_DIET"
 export const FILTER_CREATED = "FILTER_CREATED"
 export const FILTER_API="FILTER_API"
 export const CLEAN_FILTER="CLEAN_FILTER"
-export const FILTER_A_Z="FILTER_A_Z"
-export const FILTER_Z_A="FILTER_Z_A"
+export const FILTER_ALPHABETIC="FILTER_ALPHABETIC"
 export const FILTER_SCORE="FILTER_SCORE"
 
 
@@ -81,8 +80,8 @@ const normalizeDiets=(recipes)=> {
  
  export const cleanFiler=()=>({type:CLEAN_FILTER})
  export const filterApi=()=>({type:FILTER_API})
- export const filterAtoZ=()=>({type:FILTER_A_Z})
- export const filterZtoA=()=>({type:FILTER_Z_A})
+ export const alphabeticFilter=(orientation)=>({type:FILTER_ALPHABETIC,payload:orientation})
+
  
  
 
