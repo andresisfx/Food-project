@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { cleanFiler, filterApi, alphabeticFilter, filterByDiet, filterCreated, filterScore, filterZtoA, getDiets, getRecipes } from '../../redux/actions'
+import { cleanFiler,  alphabeticFilter, filterByDiet, filterOrigin, filterScore,  getDiets, getRecipes } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid'
 function Home() { 
 
   const recipes = useSelector((state)=> state.allRecipes);
+  const recipesFiltered = useSelector((state)=> state.recipesFiltered);
+  const filter = useSelector((state)=> state.filter);
   const diets= useSelector((state)=> state.allDiets)
   const [selectedDiet,setSelectedDiet]=useState("none")
   const [currentPage,setCurrentPage]=useState(0)
@@ -23,11 +25,9 @@ function Home() {
   
   console.log('useEffect: Home mounted')
  
- },[dispatch])
+ },[])
  
- useEffect(()=>{
-   setItem([...recipes].splice(0,itemsPerPage))
- },[[recipes]])
+
 
  const nextPage=()=>{
   const next_page= currentPage+1;
@@ -46,15 +46,13 @@ function Home() {
      dispatch(filterByDiet(dietName))
    }
    
-   const handleCreatedChange =()=>{
-       dispatch(filterCreated())
+   const handleOriginRecipes =(origin)=>{
+       dispatch(filterOrigin(origin))
    }
    const handleCleanFilterchange=()=>{
       dispatch(cleanFiler())
    }
-   const handleApiFilter=()=>{
-    dispatch(filterApi())
-   }
+  
    const handleAlphabetical=(orientation)=>{
     dispatch(alphabeticFilter(orientation))
    }
@@ -79,28 +77,32 @@ function Home() {
           {diets?diets.map((diet)=><option key={uuidv4()} value={diet.name}>{diet.name}</option>):null }
         </select>
       </div>
-      <div>       
-        <button onClick={()=>handleCreatedChange()}>Creted recipes</button>
-      </div>
       <div>
-        <button onClick={()=>handleApiFilter()}>Recipes from app</button>
+        <label htmlFor="">Origin recipes</label>
+        <select value=""onChange={(event)=>handleOriginRecipes(event.target.value)}>
+        <option value="">Select an option</option>        
+        <option value="created">Recipes creted  by users</option>
+        <option value="api">Preexistent Recipes</option>
+        </select> 
       </div>
       <div>
         <label htmlFor="">Sort in alphabetical order</label>
-        <select onChange={(event)=>handleAlphabetical(event.target.value)}>
+        <select value="" onChange={(event)=>handleAlphabetical(event.target.value)}>
+        <option value="">Select an option</option>
         <option value="A">A to Z</option>
         <option value="Z">Z to A</option>
         </select>
       </div>
       <div>
         <label >Order recipe by healthscore</label>
-        <select name="" onChange={(event)=>handleScoreChange(event.target.value)} >
+        <select value="" onChange={(event)=>handleScoreChange(event.target.value)} >
+        <option value="">Select an option</option>
         <option value="up">From least healthy to healthiest</option>
         <option value="down">From healthiest to least healthy</option>
         </select>
       </div>
       <div>
-      <Container recipes={recipes}/>
+      <Container recipes={filter?recipesFiltered:recipes}/>
       </div>
     </div> 
   )

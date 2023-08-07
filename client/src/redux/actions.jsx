@@ -6,8 +6,7 @@ export const GET_DIETS = "GET_DIETS"
 export const SEARCH_BAR = "SEARCH_BAR"
 export const CHANGE_ERROR_STATE ="CHANGE_ERROR_STATE"
 export const FILTER_DIET="FILTER_DIET"
-export const FILTER_CREATED = "FILTER_CREATED"
-export const FILTER_API="FILTER_API"
+export const FILTER_ORIGIN="FILTER_ORIGIN"
 export const CLEAN_FILTER="CLEAN_FILTER"
 export const FILTER_ALPHABETIC="FILTER_ALPHABETIC"
 export const FILTER_SCORE="FILTER_SCORE"
@@ -74,12 +73,12 @@ const normalizeDiets=(recipes)=> {
  
  export const filterByDiet =(diet)=>({type:FILTER_DIET,payload:diet})
 
- export const filterCreated =(recipes)=>({type:FILTER_CREATED,payload:recipes})
-
  export const filterScore =(orientation)=>({type:FILTER_SCORE,payload:orientation})
  
  export const cleanFiler=()=>({type:CLEAN_FILTER})
- export const filterApi=()=>({type:FILTER_API})
+
+ export const filterOrigin=(origin)=>({type:FILTER_ORIGIN,payload:origin})
+
  export const alphabeticFilter=(orientation)=>({type:FILTER_ALPHABETIC,payload:orientation})
 
  

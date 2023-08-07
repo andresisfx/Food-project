@@ -1,7 +1,9 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET,FILTER_CREATED, CLEAN_FILTER, FILTER_API, FILTER_ALPHABETIC, FILTER_SCORE} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET, CLEAN_FILTER, FILTER_ORIGIN, FILTER_ALPHABETIC, FILTER_SCORE} from "./actions"
 
 let initialState = {
     allRecipes:[],
+    recipesFiltered:[],
+    filter:false,
     allRecipesCopy:[],
     allDiets:[],
     errorState:"error"
@@ -14,10 +16,7 @@ function rootReducer (state = initialState,action){
             ...state,
             allRecipes:action.payload,
             allRecipesCopy:JSON.parse(JSON.stringify(action.payload)),
-            recipesCopy2:JSON.parse(JSON.stringify(action.payload)),
-            recipesCopy3:JSON.parse(JSON.stringify(action.payload)),
-            recipesCopyForAll:JSON.parse(JSON.stringify(action.payload)),
-            recipesCopy4:JSON.parse(JSON.stringify(action.payload))
+          
             
         }
    
@@ -52,29 +51,29 @@ function rootReducer (state = initialState,action){
         ...state,
         allRecipes:filterOne
     } 
-    case FILTER_CREATED:
-          
-        return{
-            ...state,
-            allRecipes: state.allRecipesCopy.filter(recipe=>recipe.hasOwnProperty("createdDb"))
-        }
+   
 
     case CLEAN_FILTER:
       return{
         ...state,
-        allRecipes:state.recipesCopyForAll
+        allRecipes:[...state.allRecipesCopy]
       } 
-    case FILTER_API:
+    case FILTER_ORIGIN:
+      let originRec = []
+      action.payload==="api"? originRec=[...state.allRecipesCopy].filter(recipe=>!recipe.hasOwnProperty("createdDb")):
+      originRec=[...state.allRecipesCopy].filter(recipe=>recipe.hasOwnProperty("createdDb"))
       return{
         ...state,
-        allRecipes: state.recipesCopy3.filter(recipe=>!recipe.hasOwnProperty("createdDb"))
+        
+        allRecipes: originRec
       }     
     case FILTER_ALPHABETIC:
-      const filteredRec=[]
+      let filteredRec=[]
       action.payload==="A"?filteredRec=[...state.allRecipesCopy].sort((a,b)=>a.name.toLowerCase().localeCompare(b.name.toLowerCase())):
       filteredRec=[...state.allRecipesCopy].sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase()))
       return{
         ...state,
+        
         allRecipes:filteredRec
       }
   
@@ -83,6 +82,7 @@ function rootReducer (state = initialState,action){
       [...state.allRecipesCopy].sort((a,b)=>b.healthScore-a.healthScore)
       return{
         ...state,
+       
         allRecipes:scoreFiltered
       }         
         default:
