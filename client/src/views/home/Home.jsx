@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { cleanFiler,  alphabeticFilter, filterByDiet, filterOrigin, filterScore,  getDiets, getRecipes } from '../../redux/actions'
+import { cleanFiler,  alphabeticFilter, filterByDiet, filterOrigin, filterScore,  getDiets, getRecipes, paginate } from '../../redux/actions'
 import {useDispatch,useSelector} from "react-redux"
 import Container from '../../components/container/Container';
 import SearchBar from '../../components/searchBar/SearchBar';
@@ -9,16 +9,15 @@ import { v4 as uuidv4 } from 'uuid'
 function Home() { 
 
   const recipes = useSelector((state)=> state.allRecipes);
+  const paginatedRecipes = useSelector((state)=> state.paginatedRecipes);
   const recipesFiltered = useSelector((state)=> state.recipesFiltered);
   const filter = useSelector((state)=> state.filter);
   const diets= useSelector((state)=> state.allDiets)
   const [selectedDiet,setSelectedDiet]=useState("none")
-  const [currentPage,setCurrentPage]=useState(0)
-  const itemsPerPage = 10
-  const [item,setItem]=useState([...recipes].splice(0,itemsPerPage))
+
  
   const dispatch = useDispatch();
- console.log(recipes)
+ console.log(paginatedRecipes)
  useEffect  (()=>{
   dispatch(getRecipes())
   dispatch(getDiets())
@@ -26,18 +25,12 @@ function Home() {
   console.log('useEffect: Home mounted')
  
  },[])
- 
+ console.log(filter)
 
 
- const nextPage=()=>{
-  const next_page= currentPage+1;
-  const firstIndex= next_page*itemsPerPage
 
-  setItem([...recipes].splice(firstIndex,itemsPerPage))
-  setCurrentPage(next_page)
- }
- const handleNextPage=()=>{
-  set
+ const handlePaginate=(order)=>{
+  dispatch(paginate(order))
  }
     
    const handleSelectChange=(event)=>{
@@ -100,9 +93,11 @@ function Home() {
         <option value="up">From least healthy to healthiest</option>
         <option value="down">From healthiest to least healthy</option>
         </select>
+        <button vlaue="prev" onClick={(e)=>handlePaginate(e.target.value)}>prev-page</button><button value="next" onClick={(e)=>handlePaginate(e.target.value)}>next-Page</button>
       </div>
+      
       <div>
-      <Container recipes={filter?recipesFiltered:recipes}/>
+      <Container recipes={filter?recipesFiltered:paginatedRecipes}/>
       </div>
     </div> 
   )

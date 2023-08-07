@@ -1,21 +1,26 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET, CLEAN_FILTER, FILTER_ORIGIN, FILTER_ALPHABETIC, FILTER_SCORE} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET, CLEAN_FILTER, FILTER_ORIGIN, FILTER_ALPHABETIC, FILTER_SCORE,PAGINATE} from "./actions"
 
 let initialState = {
     allRecipes:[],
+    paginatedRecipes:[],
     recipesFiltered:[],
     filter:false,
     allRecipesCopy:[],
     allDiets:[],
-    errorState:"error"
+    errorState:"error",
+    currentPage:0
 }
 
 function rootReducer (state = initialState,action){
+  const items_per_page =10
    switch (action.type) {
     case GET_RECIPES: 
         return{ 
             ...state,
+            filter:false,
             allRecipes:action.payload,
             allRecipesCopy:JSON.parse(JSON.stringify(action.payload)),
+            paginatedRecipes:[...action.payload].splice(0,items_per_page)
           
             
         }
@@ -25,6 +30,7 @@ function rootReducer (state = initialState,action){
         
         return {
             ...state,
+            filter:false,
             allRecipes:action.payload
         }
     case GET_DIETS:
@@ -49,7 +55,8 @@ function rootReducer (state = initialState,action){
     }
     return{
         ...state,
-        allRecipes:filterOne
+        filter:true,
+        recipesFiltered:filterOne
     } 
    
 
@@ -64,8 +71,8 @@ function rootReducer (state = initialState,action){
       originRec=[...state.allRecipesCopy].filter(recipe=>recipe.hasOwnProperty("createdDb"))
       return{
         ...state,
-        
-        allRecipes: originRec
+        filter:true,
+        recipesFiltered: originRec
       }     
     case FILTER_ALPHABETIC:
       let filteredRec=[]
@@ -73,8 +80,8 @@ function rootReducer (state = initialState,action){
       filteredRec=[...state.allRecipesCopy].sort((a,b)=>b.name.toLowerCase().localeCompare(a.name.toLowerCase()))
       return{
         ...state,
-        
-        allRecipes:filteredRec
+        filter:true,
+        recipesFiltered:filteredRec
       }
   
     case FILTER_SCORE:                                                             
@@ -82,10 +89,36 @@ function rootReducer (state = initialState,action){
       [...state.allRecipesCopy].sort((a,b)=>b.healthScore-a.healthScore)
       return{
         ...state,
-       
-        allRecipes:scoreFiltered
-      }         
+       filter:true,
+        recipesFiltered:scoreFiltered
+      }
+    case PAGINATE:
+     
+      const next_page =  state.currentPage + 1
+      let prev_page = state.currentPage<0?-1:state.currentPage - 1
+      const firstIndex = action.payload==="prev"? prev_page* items_per_page:next_page* items_per_page
+      if(state.filter){
+          if(firstIndex>=[...state.recipesFiltered].length){return{...state}}
+          else if(firstIndex<0){return{...state}}
+          else{
+           return {
+            ...state,
+            recipesFiltered:[...state.recipesFiltered].splice(firstIndex,items_per_page),
+            currentPage:action.payload==="next"?next_page:prev_page
+           }  
+          }
+      }
+      if(action.payload==="next"&& firstIndex>=state.allRecipes.length){return{...state}}
+       else if(action.payload==="prev"&&prev_page<0){ return{...state}}
+          else{
+            return{
+              ...state,
+             paginatedRecipes:[...state.allRecipes].splice(firstIndex,items_per_page),
+             currentPage:action.payload==="next"?next_page:prev_page
+            }
+          }       
         default:
+          
         return {
         ...state
        } 

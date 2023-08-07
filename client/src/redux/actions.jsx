@@ -10,6 +10,7 @@ export const FILTER_ORIGIN="FILTER_ORIGIN"
 export const CLEAN_FILTER="CLEAN_FILTER"
 export const FILTER_ALPHABETIC="FILTER_ALPHABETIC"
 export const FILTER_SCORE="FILTER_SCORE"
+export const PAGINATE="PAGINATE"
 
 
 const normalizeDiets=(recipes)=> {
@@ -80,6 +81,8 @@ const normalizeDiets=(recipes)=> {
  export const filterOrigin=(origin)=>({type:FILTER_ORIGIN,payload:origin})
 
  export const alphabeticFilter=(orientation)=>({type:FILTER_ALPHABETIC,payload:orientation})
+ 
+ export const paginate=(order)=>({type:PAGINATE,payload:order})
 
  
  
