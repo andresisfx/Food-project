@@ -10,13 +10,15 @@ function Home() {
 
   const recipes = useSelector((state)=> state.allRecipes);
   const paginatedRecipes = useSelector((state)=> state.paginatedRecipes);
-  const recipesFiltered = useSelector((state)=> state.recipesFiltered);
+  const recipesFiltered = useSelector((state)=> state.filterPaginate);
   const filter = useSelector((state)=> state.filter);
   const diets= useSelector((state)=> state.allDiets)
   const [selectedDiet,setSelectedDiet]=useState("none")
 
  
   const dispatch = useDispatch();
+
+ console.log("estas son sin filtro")
  console.log(paginatedRecipes)
  useEffect  (()=>{
   dispatch(getRecipes())
@@ -26,6 +28,8 @@ function Home() {
  
  },[])
  console.log(filter)
+ console.log(recipesFiltered)
+
 
 
 
@@ -47,6 +51,7 @@ function Home() {
    }
   
    const handleAlphabetical=(orientation)=>{
+    console.log(orientation)
     dispatch(alphabeticFilter(orientation))
    }
    
@@ -58,7 +63,6 @@ function Home() {
     <div> 
       <div>
         <button onClick={()=>handleCleanFilterchange()} >All recipes</button>
-        
       </div>
       <div>
         <SearchBar/>

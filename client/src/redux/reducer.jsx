@@ -4,6 +4,7 @@ let initialState = {
     allRecipes:[],
     paginatedRecipes:[],
     recipesFiltered:[],
+    filterPaginate:[],
     filter:false,
     allRecipesCopy:[],
     allDiets:[],
@@ -31,7 +32,7 @@ function rootReducer (state = initialState,action){
         return {
             ...state,
             filter:false,
-            allRecipes:action.payload
+            paginatedRecipes:[...action.payload].splice(0,items_per_page)
         }
     case GET_DIETS:
         return {
@@ -63,7 +64,8 @@ function rootReducer (state = initialState,action){
     case CLEAN_FILTER:
       return{
         ...state,
-        allRecipes:[...state.allRecipesCopy]
+        filter:false,
+        paginatedRecipes:[...state.allRecipes].splice(0,items_per_page)
       } 
     case FILTER_ORIGIN:
       let originRec = []
@@ -81,7 +83,8 @@ function rootReducer (state = initialState,action){
       return{
         ...state,
         filter:true,
-        recipesFiltered:filteredRec
+        recipesFiltered:filteredRec,
+        filterPaginate:[...filteredRec].splice(0,items_per_page)
       }
   
     case FILTER_SCORE:                                                             
@@ -99,21 +102,22 @@ function rootReducer (state = initialState,action){
       const firstIndex = action.payload==="prev"? prev_page* items_per_page:next_page* items_per_page
       if(state.filter){
           if(firstIndex>=[...state.recipesFiltered].length){return{...state}}
-          else if(firstIndex<0){return{...state}}
+          else if(prev_page<0){return{...state}}
           else{
            return {
             ...state,
-            recipesFiltered:[...state.recipesFiltered].splice(firstIndex,items_per_page),
-            currentPage:action.payload==="next"?next_page:prev_page
+            filterPaginate:state.recipesFiltered.slice(firstIndex,firstIndex+items_per_page),
+            currentPage:action.payload==="next"?next_page:prev_page,
+           
            }  
           }
       }
-      if(action.payload==="next"&& firstIndex>=state.allRecipes.length){return{...state}}
+      if(action.payload==="next"&& firstIndex>=state.allRecipesCopy.length){return{...state}}
        else if(action.payload==="prev"&&prev_page<0){ return{...state}}
           else{
             return{
               ...state,
-             paginatedRecipes:[...state.allRecipes].splice(firstIndex,items_per_page),
+             paginatedRecipes:[...state.allRecipesCopy].splice(firstIndex,items_per_page),
              currentPage:action.payload==="next"?next_page:prev_page
             }
           }       
