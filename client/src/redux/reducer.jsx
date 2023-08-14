@@ -1,10 +1,8 @@
-import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET, CLEAN_FILTER, FILTER_ORIGIN, FILTER_ALPHABETIC, FILTER_SCORE,PAGINATE} from "./actions"
+import {GET_RECIPES,SEARCH_BAR,GET_DIETS,FILTER_DIET, CLEAN_FILTER, FILTER_ORIGIN, FILTER_ALPHABETIC, FILTER_SCORE} from "./actions"
 
 let initialState = {
     allRecipes:[],
-    paginatedRecipes:[],
     recipesFiltered:[],
-    filterPaginate:[],
     filter:false,
     allRecipesCopy:[],
     allDiets:[],
@@ -21,7 +19,7 @@ function rootReducer (state = initialState,action){
             filter:false,
             allRecipes:action.payload,
             allRecipesCopy:JSON.parse(JSON.stringify(action.payload)),
-            paginatedRecipes:[...action.payload].splice(0,items_per_page)
+          
           
             
         }
@@ -32,7 +30,7 @@ function rootReducer (state = initialState,action){
         return {
             ...state,
             filter:false,
-            paginatedRecipes:[...action.payload].splice(0,items_per_page)
+            allRecipes:[...action.payload].splice(0,items_per_page)
         }
     case GET_DIETS:
         return {
@@ -65,7 +63,7 @@ function rootReducer (state = initialState,action){
       return{
         ...state,
         filter:false,
-        paginatedRecipes:[...state.allRecipes].splice(0,items_per_page)
+        allRecipes:state.allRecipesCopy
       } 
     case FILTER_ORIGIN:
       let originRec = []
@@ -84,7 +82,7 @@ function rootReducer (state = initialState,action){
         ...state,
         filter:true,
         recipesFiltered:filteredRec,
-        filterPaginate:[...filteredRec].splice(0,items_per_page)
+    
       }
   
     case FILTER_SCORE:                                                             
@@ -95,32 +93,7 @@ function rootReducer (state = initialState,action){
        filter:true,
         recipesFiltered:scoreFiltered
       }
-    case PAGINATE:
-     
-      const next_page =  state.currentPage + 1
-      let prev_page = state.currentPage<0?-1:state.currentPage - 1
-      const firstIndex = action.payload==="prev"? prev_page* items_per_page:next_page* items_per_page
-      if(state.filter){
-          if(firstIndex>=[...state.recipesFiltered].length){return{...state}}
-          else if(prev_page<0){return{...state}}
-          else{
-           return {
-            ...state,
-            filterPaginate:state.recipesFiltered.slice(firstIndex,firstIndex+items_per_page),
-            currentPage:action.payload==="next"?next_page:prev_page,
-           
-           }  
-          }
-      }
-      if(action.payload==="next"&& firstIndex>=state.allRecipesCopy.length){return{...state}}
-       else if(action.payload==="prev"&&prev_page<0){ return{...state}}
-          else{
-            return{
-              ...state,
-             paginatedRecipes:[...state.allRecipesCopy].splice(firstIndex,items_per_page),
-             currentPage:action.payload==="next"?next_page:prev_page
-            }
-          }       
+         
         default:
           
         return {

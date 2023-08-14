@@ -1,1 +1,17 @@
+body {
+    background-image: url(https://media.cnn.com/api/v1/images/stellar/prod/220126123914-01-unknown-space-object-icrar.jpg?q=h_1802,w_3000,x_0,y_0);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  
+
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
   

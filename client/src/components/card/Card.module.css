@@ -1,10 +1,44 @@
 .cont{
-    background-color: rgb(103, 75, 0);
+    /* background-color: rgb(103, 75, 0);
     width:30vh;
     height: 40vh;
     border: solid 2px;
     border-radius: 5px;
-    margin-bottom: 10px;
-    margin: 10px;
+    margin-bottom: 10px;*/
+    margin-right: 100px; 
+    margin-bottom: 3.125rem; 
+    width: 230px;
+    height: 500px;
+    background-image: linear-gradient(163deg, #372a08 0%, #d8a524 100%);
+    
+    border-radius: 20px;
+    transition: all .3s;
+    text-decoration: none;
+    display: flex;
+}
+.cont:hover {
+    box-shadow: 0px 0px 50px 1px rgba(68, 255, 0, 0.3);
+    background-image: linear-gradient(163deg, #00ffa6 0%, #ffb700 100%);
+    transform: scale(1.05);
+}
 
+.link{
+    /* width: 230px;
+    height: 350px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all .2s;
+    position: relative; */
+    text-decoration: none;
+    color: black;
+}
+.text{
+    text-align: center;
+}
+.image{
+    width: 90%;
+   
+   
+    border-radius: 10px; 
+    align-self: flex-end;
 }
